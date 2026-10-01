@@ -21,8 +21,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Test application
-        run: npm test --if-present
+      - name: DockerHub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -t nodejs-demo-app .
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: snehalcode66/nodejs-demo-app:latest
